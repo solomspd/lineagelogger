@@ -72,8 +72,8 @@
     $nodes = $nodes;
   };
 
-  const saveAndDownload = () => {
-    const data = {
+  const serializeData = () => {
+    return {
       nodes: $nodes.map((node) => {
         return { ...node, data: get(node.data) };
       }),
@@ -81,6 +81,20 @@
         return { ...edge, data: get(edge.data) };
       }),
     };
+  };
+
+  const deserializeData = (data: any) => {
+    $nodes = data.nodes.map((node: any) => {
+      return { ...node, data: writable(node.data) };
+    });
+    $edges = data.edges.map((edge: any) => {
+      return { ...edge, data: writable(edge.data) };
+    });
+    nextId = Math.max(data.nodes.map((node: any) => parseInt(node.id))) + 1;
+  };
+
+  const saveAndDownload = () => {
+    const data = serializeData();
     const dataStr =
       "data:text/json;charset=utf-8," +
       encodeURIComponent(JSON.stringify(data));
@@ -102,15 +116,7 @@
         const reader = new FileReader();
         reader.onload = (e) => {
           const data = JSON.parse(e.target?.result as string);
-          data.nodes = data.nodes.map((node) => {
-            return { ...node, data: writable(node.data) };
-          });
-          data.edges = data.edges.map((edge) => {
-            return { ...edge, data: writable(edge.data) };
-          });
-          $nodes = data.nodes;
-          $edges = data.edges;
-          nextId = Math.max(data.nodes.map((node) => parseInt(node.id))) + 1;
+          deserializeData(data);
         };
         reader.readAsText(file);
       }
@@ -119,7 +125,7 @@
   };
 
   const generateLink = () => {
-    const data = { nodes: $nodes, edges: $edges };
+    const data = serializeData();
     const dataStr = encodeURIComponent(btoa(JSON.stringify(data)));
     const url = new URL(window.location.href);
     url.searchParams.set("data", dataStr);
@@ -132,9 +138,7 @@
     console.log(data);
     if (data) {
       const decodedData = JSON.parse(atob(decodeURIComponent(data)));
-      console.log(decodedData);
-      $nodes = decodedData.nodes;
-      $edges = decodedData.edges;
+      deserializeData(decodedData);
     }
   });
 </script>
