@@ -13,6 +13,8 @@
   import SpouseNode from "./lib/SpouseNode.svelte";
   import SideBar from "./lib/SideBar.svelte";
   import ButtonEdge from "./lib/buttonEdge.svelte";
+  import base64 from "base64-js";
+  import { deflate, inflate } from "pako";
 
   import "@xyflow/svelte/dist/style.css";
 
@@ -90,7 +92,7 @@
     $edges = data.edges.map((edge: any) => {
       return { ...edge, data: writable(edge.data) };
     });
-    nextId = Math.max(data.nodes.map((node: any) => parseInt(node.id))) + 1;
+    nextId = Math.max(...data.nodes.map((node: any) => parseInt(node.id))) + 1;
   };
 
   const saveAndDownload = () => {
@@ -126,18 +128,26 @@
 
   const generateLink = () => {
     const data = serializeData();
-    const dataStr = encodeURIComponent(btoa(JSON.stringify(data)));
+    const dataStr = encodeURIComponent(
+      base64.fromByteArray(deflate(JSON.stringify(data)))
+    );
     const url = new URL(window.location.href);
     url.searchParams.set("data", dataStr);
+    if (url.href.length > 2000) {
+      alert(
+        "The URL is too long, might cause issues, please save and upload the data instead"
+      );
+    }
     navigator.clipboard.writeText(url.href);
   };
 
   onMount(() => {
     const url = new URL(window.location.href);
     const data = url.searchParams.get("data");
-    console.log(data);
-    if (data) {
-      const decodedData = JSON.parse(atob(decodeURIComponent(data)));
+    if (data !== null) {
+      const decodedData = JSON.parse(
+        inflate(base64.toByteArray(decodeURIComponent(data)), { to: "string" })
+      );
       deserializeData(decodedData);
     }
   });
@@ -148,7 +158,6 @@
 This means that the parent container needs a height to render the flow.
 -->
 <main>
-  <!-- {@debug nodes} -->
   <SvelteFlow
     {nodes}
     {edges}

@@ -19,6 +19,9 @@
     "vite": "^5.1.4"
   },
   "dependencies": {
-    "@xyflow/svelte": "^0.0.37"
+    "@fortawesome/fontawesome-free": "^6.5.1",
+    "@xyflow/svelte": "^0.0.37",
+    "base64-js": "^1.5.1",
+    "pako": "^2.1.0"
   }
 }
