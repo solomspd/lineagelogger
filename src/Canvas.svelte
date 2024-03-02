@@ -27,32 +27,10 @@
 
   let nextId = 0;
   // We are using writables for the nodes and edges to sync them easily. When a user drags a node for example, Svelte Flow updates its position.
-  const nodes = writable([
-    {
-      id: "a",
-      type: "member",
-      data: { firstName: writable("mohamed"), lastName: writable("tamawy") },
-      position: { x: 0, y: 0 },
-    },
-    {
-      id: "b",
-      type: "spouse",
-      // data: { startDate: writable(d) },
-      position: { x: 550, y: 0 },
-    },
-  ]);
+  const nodes = writable([]);
 
   // same for edges
-  const edges = writable([
-    {
-      id: "a-b",
-      type: "default",
-      source: "a",
-      target: "b",
-      sourceHandle: "R",
-      targetHandle: "L",
-    },
-  ]);
+  const edges = writable([]);
 
   const snapGrid = [25, 25];
 
