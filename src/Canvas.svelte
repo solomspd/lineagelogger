@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { writable } from "svelte/store";
+  import { writable, get } from "svelte/store";
   import { onMount } from "svelte";
   import {
     SvelteFlow,
@@ -14,7 +14,6 @@
   import SideBar from "./lib/SideBar.svelte";
   import ButtonEdge from "./lib/buttonEdge.svelte";
 
-  // 👇 this is important! You need to import the styles for Svelte Flow to work
   import "@xyflow/svelte/dist/style.css";
 
   const nodeTypes = {
@@ -26,10 +25,9 @@
   };
 
   let nextId = 0;
-  // We are using writables for the nodes and edges to sync them easily. When a user drags a node for example, Svelte Flow updates its position.
+
   const nodes = writable([]);
 
-  // same for edges
   const edges = writable([]);
 
   const snapGrid = [25, 25];
@@ -75,7 +73,14 @@
   };
 
   const saveAndDownload = () => {
-    const data = { nodes: $nodes, edges: $edges };
+    const data = {
+      nodes: $nodes.map((node) => {
+        return { ...node, data: get(node.data) };
+      }),
+      edges: $edges.map((edge) => {
+        return { ...edge, data: get(edge.data) };
+      }),
+    };
     const dataStr =
       "data:text/json;charset=utf-8," +
       encodeURIComponent(JSON.stringify(data));
@@ -97,8 +102,15 @@
         const reader = new FileReader();
         reader.onload = (e) => {
           const data = JSON.parse(e.target?.result as string);
+          data.nodes = data.nodes.map((node) => {
+            return { ...node, data: writable(node.data) };
+          });
+          data.edges = data.edges.map((edge) => {
+            return { ...edge, data: writable(edge.data) };
+          });
           $nodes = data.nodes;
           $edges = data.edges;
+          nextId = Math.max(data.nodes.map((node) => parseInt(node.id))) + 1;
         };
         reader.readAsText(file);
       }
