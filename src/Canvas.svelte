@@ -61,7 +61,10 @@
       id: `${nextId}`,
       type,
       position,
-      data: { label: `${type} node` },
+      data: writable<MemberInfo>({
+        firstName: "",
+        lastName: "",
+      }),
       origin: [0.5, 0.0],
     } satisfies Node;
 
@@ -129,6 +132,7 @@
 This means that the parent container needs a height to render the flow.
 -->
 <main>
+  <!-- {@debug nodes} -->
   <SvelteFlow
     {nodes}
     {edges}

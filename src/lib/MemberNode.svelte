@@ -1,20 +1,23 @@
 <script lang="ts">
-  import { Handle, Position, type NodeProps, useNodes, type Node } from "@xyflow/svelte";
+  import {
+    Handle,
+    Position,
+    type NodeProps,
+    useNodes,
+    type Node,
+  } from "@xyflow/svelte";
   import type { Writable } from "svelte/store";
 
   type $$Props = NodeProps;
 
-  export let data: { firstName: Writable<string>; lastName: Writable<string> };
-  export let id: $$Props['id'];
+  export let data: Writable<MemberInfo>;
+  export let id: $$Props["id"];
 
   const nodes = useNodes();
 
-  const { firstName, lastName } = data;
-  const deleteNode = ()  => {
-    console.log("delete node", id);
-    console.log("delete node", nodes);
+  const deleteNode = () => {
     nodes.update((nodes) => nodes.filter((node) => node.id !== id));
-  }
+  };
 </script>
 
 <div class="membernode">
@@ -28,12 +31,17 @@
         class="nodrag"
         id="firstName"
         type="text"
-        bind:value={$firstName}
+        bind:value={$data.firstName}
       />
     </div>
     <div class="input-row">
       <label class="label" for="lastName">Last Name:</label>
-      <input class="nodrag" id="lastName" type="text" bind:value={$lastName} />
+      <input
+        class="nodrag"
+        id="lastName"
+        type="text"
+        bind:value={$data.lastName}
+      />
     </div>
     <div class="input-row">
       <button on:click={deleteNode}>Delete Node</button>
