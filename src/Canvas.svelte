@@ -1,5 +1,6 @@
 <script lang="ts">
   import { writable } from "svelte/store";
+  import { onMount } from "svelte";
   import {
     SvelteFlow,
     Controls,
@@ -9,38 +10,47 @@
     useSvelteFlow,
   } from "@xyflow/svelte";
   import MemberNode from "./lib/MemberNode.svelte";
+  import SpouseNode from "./lib/SpouseNode.svelte";
   import SideBar from "./lib/SideBar.svelte";
+  import ButtonEdge from "./lib/buttonEdge.svelte";
 
   // 👇 this is important! You need to import the styles for Svelte Flow to work
   import "@xyflow/svelte/dist/style.css";
 
   const nodeTypes = {
     member: MemberNode,
+    spouse: SpouseNode,
+  };
+  const edgeTypes = {
+    default: ButtonEdge,
   };
 
+  let nextId = 0;
   // We are using writables for the nodes and edges to sync them easily. When a user drags a node for example, Svelte Flow updates its position.
   const nodes = writable([
     {
-      id: "1",
+      id: "a",
       type: "member",
-      data: { label: "Input Node", color: writable("#ff4000") },
+      data: { firstName: writable("mohamed"), lastName: writable("tamawy") },
       position: { x: 0, y: 0 },
     },
     {
-      id: "2",
-      type: "default",
-      data: { label: "Node" },
-      position: { x: 0, y: 150 },
+      id: "b",
+      type: "spouse",
+      // data: { startDate: writable(d) },
+      position: { x: 550, y: 0 },
     },
   ]);
 
   // same for edges
   const edges = writable([
     {
-      id: "1-2",
+      id: "a-b",
       type: "default",
-      source: "1",
-      target: "2",
+      source: "a",
+      target: "b",
+      sourceHandle: "R",
+      targetHandle: "L",
     },
   ]);
 
@@ -70,16 +80,70 @@
     });
 
     const newNode = {
-      id: `${Math.random()}`,
+      id: `${nextId}`,
       type,
       position,
       data: { label: `${type} node` },
       origin: [0.5, 0.0],
     } satisfies Node;
 
+    nextId += 1;
+
     $nodes.push(newNode);
     $nodes = $nodes;
   };
+
+  const saveAndDownload = () => {
+    const data = { nodes: $nodes, edges: $edges };
+    const dataStr =
+      "data:text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(data));
+    console.log(dataStr);
+    const downloadAnchorNode = document.createElement("a");
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "data.json");
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  };
+
+  const upload = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const data = JSON.parse(e.target?.result as string);
+          $nodes = data.nodes;
+          $edges = data.edges;
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  };
+
+  const generateLink = () => {
+    const data = { nodes: $nodes, edges: $edges };
+    const dataStr = encodeURIComponent(btoa(JSON.stringify(data)));
+    const url = new URL(window.location.href);
+    url.searchParams.set("data", dataStr);
+    navigator.clipboard.writeText(url.href);
+  };
+
+  onMount(() => {
+    const url = new URL(window.location.href);
+    const data = url.searchParams.get("data");
+    console.log(data);
+    if (data) {
+      const decodedData = JSON.parse(atob(decodeURIComponent(data)));
+      console.log(decodedData);
+      $nodes = decodedData.nodes;
+      $edges = decodedData.edges;
+    }
+  });
 </script>
 
 <!--
@@ -92,6 +156,7 @@ This means that the parent container needs a height to render the flow.
     {edges}
     {snapGrid}
     {nodeTypes}
+    {edgeTypes}
     fitView
     on:dragover={onDragOver}
     on:drop={onDrop}
@@ -102,12 +167,20 @@ This means that the parent container needs a height to render the flow.
     <MiniMap />
   </SvelteFlow>
   <SideBar />
+  <div class="button-container">
+    <button on:click={saveAndDownload}>Save and Download</button>
+    <button on:click={upload}>Upload</button>
+    <button on:click={generateLink}>Get sharable Link</button>
+  </div>
 </main>
 
 <style>
   main {
-    height: 100vh;
+    height: calc(100vh - 50px);
     display: flex;
     flex-direction: column-reverse;
+  }
+  .button-container {
+    display: flex;
   }
 </style>

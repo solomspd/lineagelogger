@@ -14,24 +14,17 @@
   <div class="nodes-container">
     <div
       class="input-node node"
-      on:dragstart={(event) => onDragStart(event, "input")}
+      on:dragstart={(event) => onDragStart(event, "member")}
       draggable={true}
     >
-      Input Node
+      Member
     </div>
     <div
       class="default-node node"
-      on:dragstart={(event) => onDragStart(event, "default")}
+      on:dragstart={(event) => onDragStart(event, "spouse")}
       draggable={true}
     >
-      Default Node
-    </div>
-    <div
-      class="output-node node"
-      on:dragstart={(event) => onDragStart(event, "output")}
-      draggable={true}
-    >
-      Output Node
+      Spouse
     </div>
   </div>
 </aside>
