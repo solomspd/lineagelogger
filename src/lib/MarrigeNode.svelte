@@ -48,6 +48,7 @@
       <button on:click={deleteNode}>Delete Node</button>
     </div>
   </div>
+
   <Handle type="source" position={Position.Bottom} />
 </div>
 

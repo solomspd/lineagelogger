@@ -52,6 +52,7 @@
       <button on:click={deleteNode}>Delete Node</button>
     </div>
   </div>
+
   <Handle type="target" position={Position.Top} />
 </div>
 

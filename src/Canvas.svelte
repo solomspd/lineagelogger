@@ -15,6 +15,12 @@
   import ButtonEdge from "./lib/buttonEdge.svelte";
   import base64 from "base64-js";
   import { strToU8, strFromU8, decompressSync, zlibSync } from "fflate";
+  import Fa from "svelte-fa";
+  import {
+    faUpload,
+    faDownload,
+    faLink,
+  } from "@fortawesome/free-solid-svg-icons";
 
   import "@xyflow/svelte/dist/style.css";
 
@@ -157,9 +163,13 @@
 
 <main>
   <div class="custom-controls-container">
-    <button on:click={saveAndDownload}>Save and Download</button>
-    <button on:click={upload}>Upload</button>
-    <button on:click={generateLink}>Get sharable Link</button>
+    <button on:click={saveAndDownload}
+      ><Fa icon={faDownload} />Save and Download</button
+    >
+    <button on:click={upload}><Fa icon={faUpload} /> Upload</button>
+    <button on:click={generateLink}
+      ><Fa icon={faLink} />Get sharable Link</button
+    >
     <SideBar />
   </div>
   <div class="canvas-container">
