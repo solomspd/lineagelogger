@@ -10,7 +10,7 @@
     useSvelteFlow,
   } from "@xyflow/svelte";
   import MemberNode from "./lib/MemberNode.svelte";
-  import SpouseNode from "./lib/SpouseNode.svelte";
+  import MarrigeNode from "./lib/MarrigeNode.svelte";
   import SideBar from "./lib/SideBar.svelte";
   import ButtonEdge from "./lib/buttonEdge.svelte";
   import base64 from "base64-js";
@@ -20,7 +20,7 @@
 
   const nodeTypes = {
     member: MemberNode,
-    spouse: SpouseNode,
+    marrige: MarrigeNode,
   };
   const edgeTypes = {
     default: ButtonEdge,

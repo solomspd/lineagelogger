@@ -6,7 +6,7 @@ interface MemberInfo {
   bio: string;
 }
 
-interface spouseInfo {
+interface marrigeInfo {
 	startDate: Date;
 	endDate: Date;
 }

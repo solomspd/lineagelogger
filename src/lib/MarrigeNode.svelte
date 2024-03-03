@@ -18,7 +18,7 @@
   };
 </script>
 
-<div class="spousenode">
+<div class="marrigenode">
   <Handle type="target" id="L" position={Position.Left} />
   <Handle type="target" id="R" position={Position.Right} />
 
@@ -59,7 +59,7 @@
     flex-direction: row;
   }
 
-  .spousenode {
+  .marrigenode {
     background-color: #f4f4f4;
     padding: 10px;
     border: 1px solid #111;

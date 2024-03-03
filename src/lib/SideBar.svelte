@@ -21,10 +21,10 @@
     </div>
     <div
       class="default-node node"
-      on:dragstart={(event) => onDragStart(event, "spouse")}
+      on:dragstart={(event) => onDragStart(event, "marrige")}
       draggable={true}
     >
-      Spouse
+      Marrige
     </div>
   </div>
 </aside>
