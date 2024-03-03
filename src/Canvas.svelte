@@ -14,7 +14,7 @@
   import SideBar from "./lib/SideBar.svelte";
   import ButtonEdge from "./lib/buttonEdge.svelte";
   import base64 from "base64-js";
-  import { deflate, inflate } from "pako";
+  import { strToU8, strFromU8, decompressSync, zlibSync } from "fflate";
 
   import "@xyflow/svelte/dist/style.css";
 
@@ -129,7 +129,9 @@
   const generateLink = () => {
     const data = serializeData();
     const dataStr = encodeURIComponent(
-      base64.fromByteArray(deflate(JSON.stringify(data)))
+      base64.fromByteArray(
+        zlibSync(strToU8(JSON.stringify(data)), { level: 9 })
+      )
     );
     const url = new URL(window.location.href);
     url.searchParams.set("data", dataStr);
@@ -146,17 +148,13 @@
     const data = url.searchParams.get("data");
     if (data !== null) {
       const decodedData = JSON.parse(
-        inflate(base64.toByteArray(decodeURIComponent(data)), { to: "string" })
+        strFromU8(decompressSync(base64.toByteArray(decodeURIComponent(data))))
       );
       deserializeData(decodedData);
     }
   });
 </script>
 
-<!--
-👇 By default, the Svelte Flow container has a height of 100%.
-This means that the parent container needs a height to render the flow.
--->
 <main>
   <SvelteFlow
     {nodes}
