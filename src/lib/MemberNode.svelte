@@ -4,6 +4,7 @@
     Position,
     type NodeProps,
     useNodes,
+    useEdges,
     type Node,
   } from "@xyflow/svelte";
   import type { Writable } from "svelte/store";
@@ -14,9 +15,13 @@
   export let id: $$Props["id"];
 
   const nodes = useNodes();
+  const edges = useEdges();
 
   const deleteNode = () => {
     nodes.update((nodes) => nodes.filter((node) => node.id !== id));
+    edges.update((edges) =>
+      edges.filter((edge) => edge.source !== id && edge.target !== id)
+    );
   };
 </script>
 
