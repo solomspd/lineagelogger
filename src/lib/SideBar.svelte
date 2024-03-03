@@ -10,7 +10,7 @@
 </script>
 
 <aside>
-  <div class="label">You can drag these nodes to the pane below.</div>
+  <div class="label">You can drag these nodes to the pane below</div>
   <div class="nodes-container">
     <div
       class="input-node node"
@@ -31,11 +31,11 @@
 
 <style>
   aside {
-    width: 100%;
+    /* width: 100%; */
     background: #f4f4f4;
     font-size: 12px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
   }
@@ -56,8 +56,15 @@
     border: 1px solid #111;
     padding: 0.5rem 1rem;
     font-weight: 700;
-    border-radius: 3px;
+    border-radius: 10px;
     cursor: grab;
     width: 50px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .node:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   }
 </style>

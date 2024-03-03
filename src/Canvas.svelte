@@ -156,36 +156,64 @@
 </script>
 
 <main>
-  <SvelteFlow
-    {nodes}
-    {edges}
-    {snapGrid}
-    {nodeTypes}
-    {edgeTypes}
-    fitView
-    on:dragover={onDragOver}
-    on:drop={onDrop}
-    on:nodeclick={(event) => console.log("on node click", event.detail.node)}
-  >
-    <Controls />
-    <Background variant={BackgroundVariant.Dots} />
-    <MiniMap />
-  </SvelteFlow>
-  <SideBar />
-  <div class="button-container">
+  <div class="custom-controls-container">
     <button on:click={saveAndDownload}>Save and Download</button>
     <button on:click={upload}>Upload</button>
     <button on:click={generateLink}>Get sharable Link</button>
+    <SideBar />
+  </div>
+  <div class="canvas-container">
+    <SvelteFlow
+      {nodes}
+      {edges}
+      {snapGrid}
+      {nodeTypes}
+      {edgeTypes}
+      fitView
+      on:dragover={onDragOver}
+      on:drop={onDrop}
+      on:nodeclick={(event) => console.log("on node click", event.detail.node)}
+    >
+      <Controls />
+      <Background variant={BackgroundVariant.Dots} />
+      <MiniMap />
+    </SvelteFlow>
   </div>
 </main>
 
 <style>
   main {
-    height: calc(100vh - 50px);
+    height: 100vh;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
-  .button-container {
+
+  .canvas-container {
+    flex: 1;
+  }
+
+  .custom-controls-container {
     display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  button:active {
+    background-color: #004085;
   }
 </style>
