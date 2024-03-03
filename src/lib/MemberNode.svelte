@@ -58,13 +58,17 @@
 
 <style>
   .label {
-    width: 60pt; /* Adjust this value as needed */
+    width: 60pt;
     display: inline-block;
   }
-
+  
   .column-flex {
     display: flex;
     flex-direction: column;
+  }
+  
+  input {
+    width: 5rem;
   }
 
   .input-row {

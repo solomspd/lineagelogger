@@ -31,7 +31,8 @@
   <Handle type="target" id="R" position={Position.Right} />
 
   <div class="column-flex">
-    <div class="input-row nodrag">
+    <div class="label">Marrige</div>
+    <!-- <div class="input-row">
       <label class="label" for="startDate">Start Date:</label>
       <input
         class="nodrag"
@@ -43,7 +44,7 @@
     <div class="input-row">
       <label class="label" for="endDate">End Date:</label>
       <input class="nodrag" id="endDate" type="date" bind:value={$endDate} />
-    </div>
+    </div> -->
     <div class="input-row">
       <button on:click={deleteNode}>Delete Node</button>
     </div>
@@ -54,7 +55,7 @@
 
 <style>
   .label {
-    width: 55pt; /* Adjust this value as needed */
+    width: 55pt;
     display: inline-block;
   }
 
