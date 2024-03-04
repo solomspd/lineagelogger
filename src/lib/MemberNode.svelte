@@ -58,15 +58,15 @@
 
 <style>
   .label {
-    width: 60pt;
+    width: 5.5rem;
     display: inline-block;
   }
-  
+
   .column-flex {
     display: flex;
     flex-direction: column;
   }
-  
+
   input {
     width: 5rem;
   }

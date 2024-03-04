@@ -31,9 +31,8 @@
 
 <style>
   aside {
-    /* width: 100%; */
-    background: #f4f4f4;
-    font-size: 12px;
+    /* background: #a6f5c3; */
+    font-size: 1rem;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -58,7 +57,6 @@
     font-weight: 700;
     border-radius: 10px;
     cursor: grab;
-    width: 50px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
     text-align: center;

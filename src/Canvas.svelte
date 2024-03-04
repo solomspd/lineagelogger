@@ -21,6 +21,7 @@
     faDownload,
     faLink,
   } from "@fortawesome/free-solid-svg-icons";
+  import { toast } from "@zerodevx/svelte-toast";
 
   import "@xyflow/svelte/dist/style.css";
 
@@ -147,6 +148,8 @@
       );
     }
     navigator.clipboard.writeText(url.href);
+    toast.pop(0);
+    toast.push("Link copied to clipboard");
   };
 
   onMount(() => {
@@ -163,14 +166,18 @@
 
 <main>
   <div class="custom-controls-container">
-    <button on:click={saveAndDownload}
-      ><Fa icon={faDownload} />Save and Download</button
-    >
-    <button on:click={upload}><Fa icon={faUpload} /> Upload</button>
-    <button on:click={generateLink}
-      ><Fa icon={faLink} />Get sharable Link</button
-    >
-    <SideBar />
+    <div class="buttons-container">
+      <button on:click={saveAndDownload}
+        ><Fa icon={faDownload} /> Save and Download</button
+      >
+      <button on:click={upload}><Fa icon={faUpload} /> Upload</button>
+      <button on:click={generateLink}
+        ><Fa icon={faLink} /> Get sharable Link</button
+      >
+    </div>
+    <div>
+      <SideBar />
+    </div>
   </div>
   <div class="canvas-container">
     <SvelteFlow
@@ -204,8 +211,9 @@
 
   .custom-controls-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    
   }
   button {
     margin: 10px;
