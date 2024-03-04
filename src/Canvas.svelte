@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { writable, get } from "svelte/store";
+  import { writable, get, derived } from "svelte/store";
   import { onMount } from "svelte";
   import {
     SvelteFlow,
@@ -8,6 +8,9 @@
     BackgroundVariant,
     MiniMap,
     useSvelteFlow,
+    Position,
+    type Node,
+    type Edge,
   } from "@xyflow/svelte";
   import MemberNode from "./lib/MemberNode.svelte";
   import MarrigeNode from "./lib/MarrigeNode.svelte";
@@ -22,6 +25,7 @@
     faLink,
   } from "@fortawesome/free-solid-svg-icons";
   import { toast } from "@zerodevx/svelte-toast";
+  import dagre from "@dagrejs/dagre";
 
   import "@xyflow/svelte/dist/style.css";
 
@@ -35,13 +39,56 @@
 
   let nextId = 0;
 
-  const nodes = writable([]);
+  const nodes = writable<Node[]>([]);
 
-  const edges = writable([]);
+  const edges = writable<Edge[]>([]);
 
   const snapGrid = [25, 25];
 
-  const { screenToFlowPosition } = useSvelteFlow();
+  const dagreGraph = new dagre.graphlib.Graph();
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
+  dagreGraph.setGraph({ rankdir: "TB", ranker: "longest-path" });
+
+  const nodeWidth = 172;
+  const nodeHeight = 36;
+
+  const getLayoutedGraph = (nodes: Node[], edges: Edge[]) => {
+    if (nodes.length === 0 || edges.length === 0) {
+      return { nodes, edges };
+    }
+
+    nodes.forEach((node) => {
+      dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
+    });
+
+    edges.forEach((edge) => {
+      dagreGraph.setEdge(edge.source, edge.target);
+    });
+    dagre.layout(dagreGraph);
+    nodes.forEach((node) => {
+      const nodeWithPosition = dagreGraph.node(node.id);
+      node.targetPosition = Position.Top;
+      node.sourcePosition = Position.Bottom;
+
+      // We are shifting the dagre node position (anchor=center center) to the top left
+      // so it matches the React Flow node anchor point (top left).
+      node.position = {
+        x: nodeWithPosition.x - nodeWidth / 2,
+        y: nodeWithPosition.y - nodeHeight / 2,
+      };
+    });
+
+    return { nodes, edges };
+  };
+
+  const updateLayout = () => {
+    const { nodes, edges } = getLayoutedGraph($nodes, $edges);
+    $nodes = nodes;
+    $edges = edges;
+    fitView();
+  };
+
+  const { screenToFlowPosition, fitView } = useSvelteFlow();
   const onDragOver = (event: DragEvent) => {
     event.preventDefault();
 
@@ -174,6 +221,7 @@
       <button on:click={generateLink}
         ><Fa icon={faLink} /> Get sharable Link</button
       >
+      <button on:click={updateLayout}>Update Layout</button>
     </div>
     <div>
       <SideBar />
@@ -211,7 +259,7 @@
 
   .custom-controls-container {
     position: fixed;
-    top:0;
+    top: 0;
     z-index: 100;
     width: 100%;
     display: flex;
