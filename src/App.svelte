@@ -19,15 +19,17 @@
   <SvelteFlowProvider>
     <Canvas />
   </SvelteFlowProvider>
-  <footer class="attribution">
-    <p>Made with&nbsp;</p>
-    <Fa style="color: red" icon={faHeart} />&nbsp;
-    <p>
-      by <a href="https://solom.dev">Solom</a>
-      <a href="https://github.com/solomspd/lineagelogger"
-        ><Fa icon={faGithub} /></a
-      >
-    </p>
+  <footer>
+    <div class="attribution">
+      <p class="attribution-paragraph">Made with&nbsp;</p>
+      <Fa style="color: red" icon={faHeart} />&nbsp;
+      <p class="attribution-paragraph">
+        by <a href="https://solom.dev">Solom</a>
+        <a href="https://github.com/solomspd/lineagelogger"
+          ><Fa icon={faGithub} /></a
+        >
+      </p>
+    </div>
   </footer>
 </main>
 
@@ -44,13 +46,27 @@
     --toastBackground: rgba(66, 66, 66, 0.98);
   }
 
-  .attribution {
-    display: flex;
-    flex-direction: row;
+  footer {
     position: fixed;
     bottom: 0;
     width: 100%;
+    display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .attribution {
+    background: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0.2rem;
+    border-radius: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .attribution-paragraph {
+    margin: 0;
   }
 </style>
