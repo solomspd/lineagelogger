@@ -1,6 +1,9 @@
 <script>
   import { SvelteFlowProvider } from "@xyflow/svelte";
   import { SvelteToast } from "@zerodevx/svelte-toast";
+  import Fa from "svelte-fa";
+  import { faHeart } from "@fortawesome/free-solid-svg-icons";
+  import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
   import Canvas from "./Canvas.svelte";
 
@@ -16,6 +19,16 @@
   <SvelteFlowProvider>
     <Canvas />
   </SvelteFlowProvider>
+  <footer class="attribution">
+    <p>Made with&nbsp;</p>
+    <Fa style="color: red" icon={faHeart} />&nbsp;
+    <p>
+      by <a href="https://solom.dev">Solom</a>
+      <a href="https://github.com/solomspd/lineagelogger"
+        ><Fa icon={faGithub} /></a
+      >
+    </p>
+  </footer>
 </main>
 
 <style>
@@ -29,5 +42,15 @@
     --toastPadding: 0 0.5rem 0 0.5rem;
     --toastBorderRadius: 0.5rem;
     --toastBackground: rgba(66, 66, 66, 0.98);
+  }
+
+  .attribution {
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
   }
 </style>

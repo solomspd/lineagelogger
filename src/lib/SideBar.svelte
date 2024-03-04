@@ -13,14 +13,18 @@
   <div class="label">You can drag these nodes to the pane below</div>
   <div class="nodes-container">
     <div
-      class="input-node node"
+      class="node"
+      role="button"
+      tabindex="-1"
       on:dragstart={(event) => onDragStart(event, "member")}
       draggable={true}
     >
       Member
     </div>
     <div
-      class="default-node node"
+      class="node"
+      role="button"
+      tabindex="-1"
       on:dragstart={(event) => onDragStart(event, "marrige")}
       draggable={true}
     >
@@ -42,6 +46,9 @@
   .label {
     margin: 1rem 0;
     font-size: 0.9rem;
+    background: white;
+    border-radius: 1rem;
+    padding: 0.2rem;
   }
 
   .nodes-container {
@@ -60,6 +67,7 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
     text-align: center;
+    background: white;
   }
 
   .node:hover {

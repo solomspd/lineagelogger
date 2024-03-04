@@ -164,7 +164,7 @@
   });
 </script>
 
-<main>
+<div class="main-container">
   <div class="custom-controls-container">
     <div class="buttons-container">
       <button on:click={saveAndDownload}
@@ -196,10 +196,10 @@
       <MiniMap />
     </SvelteFlow>
   </div>
-</main>
+</div>
 
 <style>
-  main {
+  .main-container {
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -210,10 +210,13 @@
   }
 
   .custom-controls-container {
+    position: fixed;
+    top:0;
+    z-index: 100;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
   }
   button {
     margin: 10px;
