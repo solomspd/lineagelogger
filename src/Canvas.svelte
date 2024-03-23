@@ -17,7 +17,7 @@
   import SideBar from "./lib/SideBar.svelte";
   import ButtonEdge from "./lib/buttonEdge.svelte";
   import base64 from "base64-js";
-  import { strToU8, strFromU8, decompressSync, zlibSync } from "fflate";
+  import { decompressSync, zlibSync } from "fflate";
   import Fa from "svelte-fa";
   import {
     faUpload,
