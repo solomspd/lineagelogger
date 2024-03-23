@@ -25,7 +25,9 @@
     faLink,
   } from "@fortawesome/free-solid-svg-icons";
   import { toast } from "@zerodevx/svelte-toast";
+  import { unpack, pack } from "msgpackr";
   import dagre from "@dagrejs/dagre";
+  import { saveAs } from "file-saver";
 
   import "@xyflow/svelte/dist/style.css";
 
@@ -151,16 +153,12 @@
 
   const saveAndDownload = () => {
     const data = serializeData();
-    const dataStr =
-      "data:text/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(data));
-    console.log(dataStr);
-    const downloadAnchorNode = document.createElement("a");
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", "data.json");
-    document.body.appendChild(downloadAnchorNode); // required for firefox
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
+    saveAs(
+      new Blob([pack(data)], {
+        type: "application/msgpack",
+      }),
+      "data.mpk"
+    );
   };
 
   const upload = () => {
@@ -171,10 +169,10 @@
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          const data = JSON.parse(e.target?.result as string);
+          const data = unpack(e.target?.result);
           deserializeData(data);
         };
-        reader.readAsText(file);
+        reader.readAsArrayBuffer(file);
       }
     };
     input.click();
@@ -183,9 +181,7 @@
   const generateLink = () => {
     const data = serializeData();
     const dataStr = encodeURIComponent(
-      base64.fromByteArray(
-        zlibSync(strToU8(JSON.stringify(data)), { level: 9 })
-      )
+      base64.fromByteArray(zlibSync(pack(data), { level: 9 }))
     );
     const url = new URL(window.location.href);
     url.searchParams.set("data", dataStr);
@@ -203,8 +199,8 @@
     const url = new URL(window.location.href);
     const data = url.searchParams.get("data");
     if (data !== null) {
-      const decodedData = JSON.parse(
-        strFromU8(decompressSync(base64.toByteArray(decodeURIComponent(data))))
+      const decodedData = unpack(
+        decompressSync(base64.toByteArray(decodeURIComponent(data)))
       );
       deserializeData(decodedData);
     }
