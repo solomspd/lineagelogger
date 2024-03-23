@@ -161,21 +161,18 @@
     );
   };
 
-  const upload = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const data = unpack(e.target?.result);
-          deserializeData(data);
-        };
-        reader.readAsArrayBuffer(file);
-      }
-    };
-    input.click();
+  let uploadTrigger: HTMLInputElement;
+
+  const upload = (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = unpack(e.target?.result);
+        deserializeData(data);
+      };
+      reader.readAsArrayBuffer(file);
+    }
   };
 
   const generateLink = () => {
@@ -213,11 +210,16 @@
       <button on:click={saveAndDownload}
         ><Fa icon={faDownload} /> Save and Download</button
       >
-      <button on:click={upload}><Fa icon={faUpload} /> Upload</button>
+      <button
+        on:click={() => {
+          uploadTrigger.click();
+        }}><Fa icon={faUpload} /> Upload</button
+      >
       <button on:click={generateLink}
         ><Fa icon={faLink} /> Get sharable Link</button
       >
       <button on:click={updateLayout}>Update Layout</button>
+      <input type="file" bind:this={uploadTrigger} on:change={upload} hidden />
     </div>
     <div>
       <SideBar />
