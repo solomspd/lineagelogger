@@ -218,7 +218,7 @@
       <button on:click={generateLink}
         ><Fa icon={faLink} /> Get sharable Link</button
       >
-      <button on:click={updateLayout}>Update Layout</button>
+      <!-- <button on:click={updateLayout}>Update Layout</button> -->
       <input type="file" bind:this={uploadTrigger} on:change={upload} hidden />
     </div>
     <div>
@@ -264,6 +264,7 @@
     justify-content: space-between;
     align-items: center;
   }
+
   button {
     margin: 10px;
     padding: 10px 20px;
